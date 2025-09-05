@@ -35,10 +35,13 @@
             </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px;">
+        <!-- 버튼 영역 -->
+        <div class="button-container">
             <button class="pull-button" id="pullButton" onclick="pullGacha()">🎲 가챠 뽑기</button>
-            <button class="reset-button" onclick="resetGame()">🔄 초기화</button>
-            <button class="reset-button" onclick="copyShareURL()" style="background: linear-gradient(45deg, #3498db, #2980b9);">📋 저장 링크 복사</button>
+            <div class="sub-buttons">
+                <button class="reset-button" onclick="resetGame()">🔄 초기화</button>
+                <button class="reset-button" onclick="copyShareURL()" style="background: linear-gradient(45deg, #3498db, #2980b9);">📋 저장 링크 복사</button>
+            </div>
         </div>
 
         <div class="probability-info">

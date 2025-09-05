@@ -32,7 +32,7 @@ const grades = {
         name: "에픽",
         probability: 7,
         color: "#9b59b6",
-        images: ["epic1.jpg", "epic2.jpg, "epic3.jpg"],
+        images: ["epic1.jpg", "epic2.jpg", "epic3.jpg"],
         coins: 100
     },
     rare: {
@@ -152,3 +152,4 @@ if (typeof stats !== 'undefined') {
     stats.coinsSpent = stats.coinsSpent || 0;
 
 }
+

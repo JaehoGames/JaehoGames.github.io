@@ -54,7 +54,7 @@ const grades = {
         probability: 43.82,
         color: "#95a5a6",
         images: ["common1.jpg", "common2.jpg", "common3.jpg", "common4.jpg", "common5.jpg"],
-        coins: 10000000000
+        coins: 1000000000028384747277488582828574727278484858382
     }
 };
 
@@ -152,4 +152,5 @@ if (typeof stats !== 'undefined') {
     stats.coinsSpent = stats.coinsSpent || 0;
 
 }
+
 

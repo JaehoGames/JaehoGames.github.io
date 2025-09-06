@@ -18,43 +18,43 @@ const grades = {
         name: "신화",
         probability: 1,
         color: "#e74c3c",
-        images: ["mythic1.jpg", "mythic2.jpg", "mythic3.jpg"],
+        images: ["mythic1.jpg", "mythic2.jpg", "mythic3.jpg", "mythic4.jpg"],
         coins: 1000
     },
     legendary: {
         name: "레전드리",
         probability: 3,
         color: "#ffd700",
-        images: ["legendary1.jpg", "legendary2.jpg"],
+        images: ["legendary1.jpg", "legendary2.jpg", "legendary3.jpg", "legendary4.jpg"],
         coins: 500
     },
     epic: {
         name: "에픽",
         probability: 7,
         color: "#9b59b6",
-        images: ["epic1.jpg", "epic2.jpg"],
+        images: ["epic1.jpg", "epic2.jpg", "epic3.jpg"],
         coins: 100
     },
     rare: {
         name: "레어",
         probability: 12,
         color: "#3498db",
-        images: ["rare1.jpg", "rare2.jpg", "rare3.jpg"],
+        images: ["rare1.jpg", "rare2.jpg", "rare3.jpg", "rare4.jpg", "rare4.jpg", "rare5.jpg", "rare6.jpg"],
         coins: 50
     },
     uncommon: {
         name: "언커먼",
         probability: 35,
         color: "#2ecc71",
-        images: ["uncommon1.jpg", "uncommon2.jpg", "uncommon3.jpg", "uncommon4.jpg"],
+        images: ["uncommon1.jpg", "uncommon2.jpg", "uncommon3.jpg", "uncommon4.jpg", "uncommon5.jpg", "uncommon6.jpg", "uncommon7.jpg"],
         coins: 20
     },
     common: {
         name: "커먼",
         probability: 43.82,
         color: "#95a5a6",
-        images: ["common1.jpg", "common2.jpg", "common3.jpg", "common4.jpg"],
-        coins: 10
+        images: ["common1.jpg", "common2.jpg", "common3.jpg", "common4.jpg", "common5.jpg"],
+        coins: 10000000000
     }
 };
 
@@ -152,3 +152,4 @@ if (typeof stats !== 'undefined') {
     stats.coinsSpent = stats.coinsSpent || 0;
 
 }
+

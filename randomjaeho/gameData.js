@@ -2,7 +2,7 @@
 const grades = {
     'ultimate-jaeho': {
         name: "얼티밋 재호",
-        probability: 0.01,
+        probability: 0.08,
         color: "#0066ff",
         images: ["ultimate-jaeho1.jpg", "ultimate-jaeho2.png"],
         coins: 10000
@@ -51,7 +51,7 @@ const grades = {
     },
     common: {
         name: "커먼",
-        probability: 43.89,
+        probability: 43.82,
         color: "#95a5a6",
         images: ["common1.jpg", "common2.jpg", "common3.jpg", "common4.jpg"],
         coins: 10
@@ -150,4 +150,5 @@ let activeEffects = {
 if (typeof stats !== 'undefined') {
     stats.itemsPurchased = stats.itemsPurchased || 0;
     stats.coinsSpent = stats.coinsSpent || 0;
+
 }

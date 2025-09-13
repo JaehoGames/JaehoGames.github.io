@@ -473,6 +473,52 @@ function toggleCollection() {
 }
 
 /**
+ * 설정 UI 및 이벤트 리스너 초기화
+ */
+function initSettings() {
+    const musicToggle = document.getElementById('musicToggle');
+    const animationToggle = document.getElementById('animationToggle');
+    const saveNotificationToggle = document.getElementById('saveNotificationToggle');
+    const bgMusic = document.getElementById('bgMusic');
+
+    if (!musicToggle || !animationToggle || !saveNotificationToggle || !bgMusic) return;
+
+    // 초기 상태 설정 (stats.settings 객체가 로드된 후 호출되어야 함)
+    const settings = stats.settings || { music: true, animation: true, showSaveNotifications: true };
+    musicToggle.checked = settings.music;
+    animationToggle.checked = settings.animation;
+    saveNotificationToggle.checked = settings.showSaveNotifications;
+
+    // 음악 토글
+    musicToggle.addEventListener('change', (e) => {
+        stats.settings.music = e.target.checked;
+        if (e.target.checked) {
+            if (bgMusic.paused) {
+                fadeAudio(bgMusic, 'in', 1000);
+            }
+        } else {
+            fadeAudio(bgMusic, 'out', 1000);
+        }
+        saveGameData(false); // 알림 없이 저장
+    });
+
+    // 애니메이션 토글
+    animationToggle.addEventListener('change', (e) => {
+        stats.settings.animation = e.target.checked;
+        saveGameData(false); // 알림 없이 저장
+    });
+
+    // 저장 알림 토글
+    saveNotificationToggle.addEventListener('change', (e) => {
+        stats.settings.showSaveNotifications = e.target.checked;
+        if (e.target.checked) {
+            showNotification('저장 알림이 켜졌습니다.', '#2ecc71');
+        }
+        saveGameData(false); // 알림 없이 저장
+    });
+}
+
+/**
  * 도감 시스템 초기화
  */
 function initCollection() {
@@ -708,6 +754,7 @@ document.addEventListener('DOMContentLoaded', function() {
             initCosmicSpace(); // 우주 공간 시스템 초기화
             initCoinClickSound(); // 코인 클릭 사운드 초기화
             initFirebaseAuth(); // Firebase 인증 시스템 초기화
+            // initSettings()는 onAuthStateChanged에서 데이터 로드 후 호출됩니다.
 
             // 인벤토리 확장 및 합성소 시스템 초기화
             const expandInventoryBtn = document.getElementById('expandInventoryBtn');

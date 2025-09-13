@@ -614,50 +614,6 @@ h1 {
     transition: all 0.3s ease;
 }
 
-/* 저장 알림 토글 스위치 */
-.setting-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-.setting-toggle span {
-    font-size: 1em;
-    color: white;
-    opacity: 0.9;
-}
-.setting-toggle input[type="checkbox"] {
-    height: 0;
-    width: 0;
-    visibility: hidden;
-}
-.setting-toggle label {
-    cursor: pointer;
-    width: 40px;
-    height: 22px;
-    background: #7f8c8d;
-    display: block;
-    border-radius: 100px;
-    position: relative;
-}
-.setting-toggle label:after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border-radius: 90px;
-    transition: 0.3s;
-}
-.setting-toggle input:checked + label {
-    background: #2ecc71;
-}
-.setting-toggle input:checked + label:after {
-    left: calc(100% - 2px);
-    transform: translateX(-100%);
-}
 /* 확률 정보 */
 .probability-info {
     background: rgba(255, 255, 255, 0.1);
@@ -1204,6 +1160,95 @@ h1 {
     font-size: 0.9em;
     margin-top: 5px;
     opacity: 0.8;
+}
+
+/* 설정 UI */
+.settings-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    margin-top: 20px;
+}
+
+.settings-container h3 {
+    margin-bottom: 20px;
+    color: #ffd700;
+    text-align: left;
+    font-size: 1.3em;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.setting-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+.setting-item:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.setting-item label {
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+/* 신규 토글 스위치 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-label {
+    background-color: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+.toggle-switch input:checked + .toggle-label:before {
+    transform: translateX(24px);
 }
 
 /* 화면 플래시 효과 */
@@ -2656,47 +2701,6 @@ h1 {
     }
     60% {
         transform: translateY(-7px);
-    }
-}
-
-/* 모바일 UI 개선 */
-@media (max-width: 768px) {
-    .floating-buttons-container {
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        background: rgba(20, 20, 30, 0.9);
-        padding: 10px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-    }
-
-    .floating-button {
-        padding: 8px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-        background: transparent;
-        box-shadow: none; flex-grow: 1;
-    }
-
-    .floating-button .label {
-        font-size: 0.7em;
-        display: none; /* 아이콘만 보이도록 라벨 숨김 */
-    }
-    .floating-button .icon { font-size: 1.8em; }
-    .cosmic-space-container.development {
-        padding: 8px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 }
 

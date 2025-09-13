@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식재호!</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>재호코인(JEC)</h1>
+        </header>
+
+        <main class="main-content">
+            <div id="news-ticker" class="news-ticker"></div>
+            <div class="stock-info">
+                <h2>오늘의 재호주식</h2>
+                <!-- TODO: src="여기에_친구_사진_경로.jpg" 처럼 실제 이미지 파일 경로를 넣어주세요. -->
+                <img id="friend-face" src="jaeho.jpg" alt="친구 얼굴">
+                <p class="price">현재가: <span id="current-price">10,000</span>원</p>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="price-chart"></canvas>
+            </div>
+
+            <div class="trading-panel">
+                <h3>거래</h3>
+                <div class="input-group">
+                    <input type="number" id="quantity" value="1" min="1">
+                    <span>주</span>
+                </div>
+                <div class="button-group">
+                    <button id="buy-btn">매수</button>
+                    <button id="sell-btn">매도</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="portfolio">
+                <h3>내 자산 현황</h3>
+                <p>보유 현금: <span id="cash">1,000,000</span>원</p>
+                <p>보유 주식: <span id="shares">0</span>주</p>
+                <p>총 평가액: <span id="total-value">1,000,000</span>원</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

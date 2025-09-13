@@ -6,6 +6,9 @@
  * @param {Array<string>} colors - 폭죽 색상 배열
  */
 function createFireworks(count, colors) {
+    // 애니메이션 설정 확인
+    if (stats.settings && !stats.settings.animation) return;
+
     const fireworksContainer = document.getElementById('fireworks');
     
     for (let i = 0; i < count; i++) {
@@ -30,6 +33,9 @@ function createFireworks(count, colors) {
  * 만원 지폐 효과 생성
  */
 function createMoneyFall() {
+    // 애니메이션 설정 확인
+    if (stats.settings && !stats.settings.animation) return;
+
     const container = document.getElementById('fireworks');
     const moneySymbol = '₩';
 
@@ -58,6 +64,9 @@ function createMoneyFall() {
  * @param {string} gradeKey - 등급 키
  */
 function applySpecialEffects(gradeKey) {
+    // 애니메이션 설정 확인
+    if (stats.settings && !stats.settings.animation) return;
+
     const screenFlash = document.getElementById('screenFlash');
 
     switch(gradeKey) {

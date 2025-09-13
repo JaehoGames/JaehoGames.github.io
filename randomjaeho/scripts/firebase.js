@@ -64,16 +64,11 @@ function initFirebaseAuth() {
 
             await loadGameData(); // Firestore에서 데이터 로드
 
-            // 저장 알림 토글 UI 업데이트
-            const saveNotificationToggle = document.getElementById('saveNotificationToggle');
-            if (saveNotificationToggle) {
-                if (stats.settings) {
-                    saveNotificationToggle.checked = stats.settings.showSaveNotifications;
-                } else {
-                    stats.settings = { showSaveNotifications: true };
-                    saveNotificationToggle.checked = true;
-                }
+            // 설정값 초기화 (기존 유저 호환)
+            if (!stats.settings) {
+                stats.settings = { music: true, animation: true, showSaveNotifications: true };
             }
+            initSettings(); // 로드된 데이터로 설정 UI 초기화
 
             // 닉네임 확인 및 설정
             const userDocRef = db.collection('users').doc(currentUser.uid);

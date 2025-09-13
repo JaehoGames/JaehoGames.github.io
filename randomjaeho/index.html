@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랜덤재호</title>
     <link rel="stylesheet" href="styles/main.css">
+    <!-- 파비콘 추가 -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <audio id="bgMusic" src="assets/audio/bgm.mp3" loop></audio>
@@ -57,11 +59,6 @@
             <button class="pull-button" id="pullButton" onclick="pullGacha()">🎲 가챠 뽑기</button>
             <div class="sub-buttons">
                 <button class="reset-button" onclick="resetGame()">🔄 초기화</button>
-                <div class="setting-toggle" title="데이터 저장 완료 알림을 켜고 끕니다." onclick="document.getElementById('saveNotificationToggle').click()">
-                    <span>저장 알림</span>
-                    <input type="checkbox" id="saveNotificationToggle" checked>
-                    <label for="saveNotificationToggle"></label>
-                </div>
             </div>
         </div>
 
@@ -164,6 +161,34 @@
             <div class="stat-item">
                 <div class="stat-number" id="rareCount">0</div>
                 <div>레어</div>
+            </div>
+        </div>
+
+        <!-- 설정 UI -->
+        <div class="settings-container">
+            <h3>⚙️ 설정</h3>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="musicToggle">🎶 배경 음악</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="musicToggle" checked>
+                        <label for="musicToggle" class="toggle-label"></label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="animationToggle">✨ 애니메이션 효과</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="animationToggle" checked>
+                        <label for="animationToggle" class="toggle-label"></label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="saveNotificationToggle">☁️ 저장 알림</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="saveNotificationToggle" checked>
+                        <label for="saveNotificationToggle" class="toggle-label"></label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,148 @@
+/* effects.css */
+
+/* 화면 플래시 효과 */
+.screen-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+/* 폭죽 효과 */
+.fireworks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.firework {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: fireworkExplode 2s ease-out forwards;
+}
+
+@keyframes fireworkExplode {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 
+            0 0 50px currentColor,
+            0 0 100px currentColor,
+            0 0 150px currentColor;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+        box-shadow: 
+            0 0 20px currentColor,
+            0 0 40px currentColor,
+            0 0 60px currentColor;
+    }
+}
+
+/* effects.css */
+
+/* 화면 플래시 효과 */
+.screen-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+/* 폭죽 효과 */
+.fireworks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.firework {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: fireworkExplode 2s ease-out forwards;
+}
+
+@keyframes fireworkExplode {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 
+            0 0 50px currentColor,
+            0 0 100px currentColor,
+            0 0 150px currentColor;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+        box-shadow: 
+            0 0 20px currentColor,
+            0 0 40px currentColor,
+            0 0 60px currentColor;
+    }
+}
+
+/* 만원 지폐 떨어지는 효과 */
+@keyframes moneyFall {
+    from {
+        transform: translateY(-50px) rotateZ(0deg);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100vh) rotateZ(720deg);
+        opacity: 0;
+    }
+}
+
+/* 화염 이벤트 활성 시 화면 톤 변경 */
+body.flame-event-active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(231, 76, 60, 0.3); /* 붉은 톤 오버레이 강화 */
+    pointer-events: none;
+    z-index: 9998; /* 플래시 효과보다는 아래에 위치 */
+    animation: flame-flicker 1s infinite alternate;
+}
+
+@keyframes flame-flicker {
+    from {
+        opacity: 0.6;
+    }
+    to {
+        opacity: 1;
+    }
+}

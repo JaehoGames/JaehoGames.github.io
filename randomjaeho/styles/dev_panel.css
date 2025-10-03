@@ -1,0 +1,457 @@
+/* dev_panel.css */
+
+/* 개발자 패널 페이지 */
+.dev-panel-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a2533;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(52, 152, 219, 0.15), transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(241, 196, 15, 0.1), transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(142, 68, 173, 0.1), transparent 35%);
+    z-index: 25000;
+    display: flex; /* flex로 변경하여 헤더와 컨테이너를 수직 정렬 */
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    padding: 40px;
+}
+
+.dev-panel-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.dev-panel-page-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    background: linear-gradient(45deg, #f1c40f, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+}
+
+.dev-panel-container {
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 30px;
+    overflow-y: auto;
+    padding: 10px; /* 내부 패딩 */
+    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    min-height: 0; /* flex-grow가 작동하도록 */
+}
+
+.dev-panel-card {
+    background: rgba(44, 62, 80, 0.5);
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dev-panel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.dev-panel-card h2 {
+    color: #f1c40f;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(241, 196, 15, 0.3);
+}
+
+/* 유저 정보 패널 */
+#userInspectorCard h2 span {
+    color: #3498db;
+}
+
+.dev-section {
+    background: rgba(0,0,0,0.15);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.dev-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.dev-section-header h4 {
+    margin: 0;
+    color: #bdc3c7;
+    font-size: 1.1em;
+}
+
+.dev-form-group.compact {
+    padding: 0;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: auto auto auto; /* Override grid */
+}
+
+.dev-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    min-height: 80px; /* 인벤토리가 비어있을 때 최소 높이 */
+    border: 1px solid rgba(0,0,0,0.3);
+}
+
+.dev-inventory-item {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dev-inventory-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px currentColor;
+}
+
+.dev-inventory-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dev-inventory-item-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    font-size: 10px;
+    padding: 2px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dev-inventory-item .dev-inventory-lock-icon {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    font-size: 1.2em;
+    text-shadow: 0 0 3px black;
+    z-index: 1;
+}
+
+.dev-inventory-item:hover .dev-inventory-lock-icon {
+    transform: scale(1.2);
+}
+
+.dev-probability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.dev-probability-grid .dev-form-group {
+    grid-template-columns: 100px 1fr;
+    padding: 10px;
+    background: rgba(0,0,0,0.1);
+}
+
+/* 개발자 패널 버튼 */
+.dev-panel-button {
+    background: linear-gradient(160deg, #f1c40f, #f39c12, #e67e22);
+    border: 3px solid #f1c40f;
+    animation: devPulse 1.5s infinite alternate;
+}
+
+@keyframes devPulse {
+    from {
+        box-shadow: 0 0 15px #f39c12, 0 0 25px #e67e22;
+        border-color: #f1c40f;
+    }
+    to {
+        box-shadow: 0 0 25px #f1c40f, 0 0 40px #f39c12;
+        border-color: #e67e22;
+    }
+}
+
+/* 공지 답장 확인 패널 */
+.announcement-replies-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+.reply-item {
+    background: rgba(0,0,0,0.2);
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.original-announcement-context {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin: 0 0 10px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.reply-nickname {
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.reply-timestamp {
+    font-size: 0.8em;
+    color: #7f8c8d;
+}
+
+.reply-message {
+    margin: 0;
+    color: #bdc3c7;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+#latestAnnouncementText {
+    color: #bdc3c7;
+    font-size: 1em;
+}
+
+/* 개발자 패널 내 입력 필드 및 버튼 스타일 */
+.dev-form-group {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px; /* 그룹 간 간격 추가 */
+}
+
+.dev-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.dev-form-group label {
+    font-weight: bold;
+    color: #bdc3c7;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.dev-form-group input, .dev-form-group select, .dev-form-group textarea {
+    flex-grow: 1;
+    background: #1c2833;
+    border: 1px solid #566573;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    min-width: 0;
+}
+
+.dev-form-group input:focus, .dev-form-group select:focus, .dev-form-group textarea:focus {
+    outline: none;
+    border-color: #f1c40f;
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+.dev-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.dev-action-button {
+    background: linear-gradient(45deg, #f39c12, #e67e22);
+    border: none;
+    padding: 12px 18px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dev-action-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #f1c40f, #f39c12);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(241, 196, 15, 0.3);
+}
+
+.dev-action-button.primary {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+}
+.dev-action-button.primary:hover:not(:disabled) {
+    background: linear-gradient(45deg, #58d68d, #2ecc71);
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+.dev-action-button.secondary {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+}
+.dev-action-button.secondary:hover:not(:disabled) {
+    background: linear-gradient(45deg, #bdc3c7, #95a5a6);
+    box-shadow: 0 4px 10px rgba(149, 165, 166, 0.3);
+}
+
+.dev-action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dev-form-group.full-width {
+    grid-template-columns: 1fr; /* Make label and textarea stack vertically */
+    gap: 10px;
+}
+
+.dev-form-group.full-width label {
+    text-align: left;
+}
+
+.dev-form-group textarea {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 80px;
+}
+
+.dev-panel-message {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    height: 1.2em;
+}
+.dev-button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+/* 접속중인 유저 목록 */
+.online-user-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 5px; /* for scrollbar */
+}
+
+.online-user-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #2ecc71;
+}
+
+.online-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.online-user-info img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.online-user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.online-user-nickname {
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.online-user-lastseen {
+    font-size: 0.8em;
+    color: #7f8c8d;
+}
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+    .dev-panel-page {
+        padding: 15px;
+    }
+
+    .dev-panel-page-header {
+        margin-bottom: 20px;
+    }
+
+    .dev-panel-page-header h1 {
+        font-size: 1.8em;
+    }
+
+    .dev-panel-container {
+        grid-template-columns: 1fr; /* 모바일에서는 항상 1열 */
+        gap: 20px;
+        padding: 5px;
+    }
+
+    .dev-panel-card {
+        padding: 20px;
+    }
+
+    .dev-form-group {
+        grid-template-columns: 1fr; /* 레이블과 입력을 수직으로 쌓음 */
+        gap: 8px;
+    }
+    .dev-form-group label {
+        text-align: left;
+    }
+}

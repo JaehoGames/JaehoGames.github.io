@@ -1,0 +1,81 @@
+/* 기본 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    /* 애니메이션을 위한 배경 설정 변경 */
+    background: linear-gradient(135deg, #667eea, #764ba2, #2c3e50, #e74c3c);
+    background-size: 400% 400%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    animation: backgroundFlow 20s ease infinite; /* 배경 애니메이션 적용 */
+}
+
+/* 배경 애니메이션 키프레임 */
+@keyframes backgroundFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 다크 모드 스타일 */
+body.dark-mode {
+    background: #121212; /* 어두운 배경색 */
+    animation: none; /* 배경 애니메이션 비활성화 */
+}
+
+
+/* 게임 컨테이너 */
+.game-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 95%;
+    max-width: 1600px; /* 3단 레이아웃을 위해 너비 확장 */
+    position: relative;
+    z-index: 10;
+
+    /* 3단 레이아웃을 위한 Flexbox 설정 */
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.main-column {
+    flex: 2;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 내부 요소 간격 */
+    text-align: center;
+    order: 2; /* 중앙에 위치 */
+}
+
+.side-column {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* 내부 요소 간격 */
+    order: 1; /* 왼쪽에 위치 */
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 0;
+}

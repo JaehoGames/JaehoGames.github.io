@@ -1,0 +1,70 @@
+
+/* 할로윈 이벤트 전용 스타일 */
+
+/* 화면 구석에 추가될 거미줄 장식 */
+.halloween-decoration {
+    position: fixed;
+    font-size: 50px;
+    opacity: 0.5;
+    pointer-events: none; /* 클릭 방지 */
+    z-index: 9999;
+    color: #ffffff;
+}
+
+.cobweb-top-left {
+    top: -10px;
+    left: -10px;
+    transform: rotate(0deg);
+}
+
+.cobweb-top-right {
+    top: -10px;
+    right: -10px;
+    transform: rotate(90deg);
+}
+
+.halloween-icon {
+    font-size: 32px; /* 아이콘 크기 조절 */
+    filter: drop-shadow(0 0 3px #a29bfe);
+}
+
+/* 유령이 깃든 재호(변이) 스타일 */
+.mutation-haunted {
+    filter: grayscale(100%) opacity(60%);
+    box-shadow: 0 0 15px 5px #a29bfe;
+    animation: haunted-float 3s ease-in-out infinite;
+}
+
+@keyframes haunted-float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* 1주차 시작 시 보여줄 으스스한 메시지 */
+.spooky-message-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #ff4500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2.5em;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    pointer-events: none;
+    font-family: 'Gothic', sans-serif; /* 으스스한 폰트가 있다면 좋습니다 */
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+}

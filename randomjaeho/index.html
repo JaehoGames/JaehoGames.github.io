@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랜덤재호</title>
+    <!-- 분리된 CSS 파일들 -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/gacha.css">
+    <link rel="stylesheet" href="styles/grades.css">
+    <link rel="stylesheet" href="styles/modals.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/dev_panel.css">
+    <!-- 파비콘 추가 -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- iOS 및 iPadOS 홈 화면 아이콘 추가 -->
+    <!-- 180x180 픽셀 크기의 'apple-touch-icon.png' 파일을 프로젝트 루트에 추가해주세요. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="styles/halloween.css">
+</head>
+<body>
+    <!-- 할로윈 이벤트용 장식 컨테이너 -->
+    <div id="halloween-decorations"></div>
+    <!-- 으스스한 메시지 오버레이 -->
+    <div id="spookyMessageOverlay" class="spooky-message-overlay"></div>
+
+    <!-- 서버 전체 공지 컨테이너 -->
+    <div id="announcementContainer" class="announcement-container"></div>
+
+    <audio id="bgmPlayer" src="assets/audio/bgm.mp3" loop></audio>
+    <audio id="coinClickSound" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABgAZGF0YQAAAAA="></audio> <!-- 빈 오디오 데이터 -->
+    <audio id="announcementSound" src="assets/audio/공지.wav"></audio>
+    
+    <!-- 입장 퀴즈 모달 -->
+    <div id="entryQuizModal" class="entry-quiz-modal">
+        <div class="entry-quiz-content">
+            <h2>🔒 입장 확인</h2>
+            <p>아래에 표시된 문자를 그대로 입력해주세요.</p>
+            <div id="entryQuizString" class="entry-quiz-string"></div>
+            <input type="text" id="entryQuizInput" placeholder="여기에 입력..." autocomplete="off">
+            <p id="entryQuizError" class="error-message"></p>
+            <button id="entryQuizSubmit" class="pull-button">입장하기</button>
+        </div>
+    </div>
+
+    <!-- 로딩 화면 -->
+    <div id="loadingScreen" class="loading-screen" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">재호 월드를 불러오는 중...</p>
+        <p id="loadingTip" class="loading-tip"></p>
+    </div>
+
+    <div class="screen-flash" id="screenFlash"></div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <!-- 최단유 이벤트 배경 (위치 이동) -->
+        <div id="danyu-background-container" class="danyu-background"></div>
+
+        <!-- 유저 정보 및 로그인/로그아웃 버튼 -->
+        <div class="auth-container" id="authContainer">
+            <div id="userProfile" class="user-profile" style="display: none;"></div>
+            <button id="loginButton" class="login-button">Google로 로그인</button>
+            <button id="logoutButton" class="logout-button" style="display: none;">로그아웃</button>
+        </div>
+
+        <div class="main-column">
+            <!-- 이벤트 카운트다운 타이머 -->
+            <div id="eventCountdown" class="event-countdown">
+                <span id="countdownText">다음 업데이트까지</span>
+                <span id="countdownTimer">00일 00:00:00</span>
+            </div>
+            <!-- 화염 이벤트 카운트다운 타이머 추가 -->
+            <div id="flameEventCountdown" class="event-countdown" style="display: none;">
+                <span id="flameCountdownText">다음 화염 이벤트까지</span>
+                <span id="flameCountdownTimer">00:00:00</span>
+            </div>
+
+            <!-- 성층권 이벤트 카운트다운 타이머 추가 -->
+            <div id="stratosphereEventCountdown" class="event-countdown" style="display: none;">
+                <span id="stratosphereCountdownText">다음 성층권 이벤트까지</span>
+                <span id="stratosphereCountdownTimer">00:00:00</span>
+            </div>
+
+            <h1>🦇🍬 랜덤재호 (1/2)</h1>
+
+            <!-- 행운의 덕담 표시 영역 -->
+            <div class="fortune-container" id="fortuneContainer">
+                <!-- 덕담이 여기에 동적으로 추가됩니다. -->
+            </div>
+            
+            <!-- 재호코인 표시 영역 -->
+            <div class="coins-display" id="coinsDisplay">
+                <div class="coin-icon">
+                    <img src="assets/images/jaeho.jpg" alt="재호코인 아이콘">
+                </div>
+                <div class="coin-amount" id="coinAmount">0</div>
+                <div class="coin-label">재호코인</div>
+            </div>
+
+            <!-- 할로윈 이벤트 재화 표시 영역 -->
+            <div class="coins-display" id="ghostCandyDisplay" style="display: none;">
+                <div class="coin-icon">
+                    <span class="halloween-icon">👻</span>
+                </div>
+                <div class="coin-amount" id="ghostCandyAmount">0</div>
+                <div class="coin-label">유령 사탕</div>
+            </div>
+            
+            <div class="gacha-container">
+                <div class="gacha-box" id="gachaBox">📦</div>
+                <p style="font-size: 1.2em; opacity: 0.8;"></p>
+                
+                <div class="result-container" id="resultContainer">
+                    <img id="resultImage" class="result-image" src="" alt="결과 이미지">
+                    <div id="resultText" class="result-text"></div>
+                    <div id="resultGrade" class="result-grade"></div>
+                </div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="button-container">
+                <button class="pull-button" id="pullButton" onclick="pullGacha(event)">🎲 가챠 뽑기</button>
+                <div class="sub-buttons">
+                    <button class="reset-button" onclick="resetGame()">🔄 초기화</button>
+                    <button class="save-button" onclick="manualSave()">💾 저장하기</button>
+                </div>
+                <div class="last-saved-time" id="lastSavedTime"></div>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <div class="probability-info">
+                <h3>📊 등급별 확률 & 재호코인</h3>
+                <div class="grade-info ancient" data-grade="ancient">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color ancient"></div>
+                        <span>만원</span>
+                    </div>
+                    <span id="prob-display-ancient">0.005% | 25,000코인</span>
+                </div>
+                <div class="grade-info ultimate-jaeho" data-grade="ultimate-jaeho">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color ultimate-jaeho"></div>
+                        <span>얼티밋 재호 (Ultimate Jaeho)</span>
+                    </div>
+                    <span id="prob-display-ultimate-jaeho">0.01% | 10,000코인</span>
+                </div>
+                <div class="grade-info transcendence" data-grade="transcendence">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color transcendence"></div>
+                        <span>초월 (Transcendence)</span>
+                    </div>
+                    <span id="prob-display-transcendence">0.05% | 7,500코인</span>
+                </div>
+                <div class="grade-info divine" data-grade="divine">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color divine"></div>
+                        <span>신성 (Divine)</span>
+                    </div>
+                    <span id="prob-display-divine">0.1% | 5,000코인</span>
+                </div>
+                <div class="grade-info cosmic" data-grade="cosmic">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color cosmic"></div>
+                        <span class="stars-bg"></span>
+                        <span class="stars-bg"></span>
+                        <span>우주 (Cosmic)</span>
+                    </div>
+                    <span id="prob-display-cosmic">0.5% | 3,000코인</span>
+                </div>
+                <div class="grade-info mythic" data-grade="mythic">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color mythic"></div>
+                        <span>신화 (Mythic)</span>
+                    </div>
+                    <span id="prob-display-mythic">1% | 1,000코인</span>
+                </div>
+                <div class="grade-info legendary" data-grade="legendary">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color legendary"></div>
+                        <span>레전드리 (Legendary)</span>
+                    </div>
+                    <span id="prob-display-legendary">3% | 500코인</span>
+                </div>
+                <div class="grade-info" data-grade="epic">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color epic"></div>
+                        <span>에픽 (Epic)</span>
+                    </div>
+                    <span id="prob-display-epic">7% | 100코인</span>
+                </div>
+                <div class="grade-info" data-grade="rare">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color rare"></div>
+                        <span>레어 (Rare)</span>
+                    </div>
+                    <span id="prob-display-rare">12% | 50코인</span>
+                </div>
+                <div class="grade-info" data-grade="uncommon">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color uncommon"></div>
+                        <span>언커먼 (Uncommon)</span>
+                    </div>
+                    <span id="prob-display-uncommon">34.5% | 20코인</span>
+                </div>
+                <div class="grade-info" data-grade="common">
+                    <div style="display: flex; align-items: center;">
+                        <div class="grade-color common"></div>
+                        <span>커먼 (Common)</span>
+                    </div>
+                    <span id="prob-display-common">41.385% | 10코인</span>
+                </div>
+            </div>
+            <!-- 기능 버튼 컨테이너 (기존 플로팅 버튼) -->
+            <div class="feature-buttons-container">
+                <div class="feature-button shop-button" onclick="toggleShop()">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">🏪</span>
+                        <span class="feature-button-label">상점</span>
+                    </div>
+                </div>
+                <div class="feature-button fusion-button" onclick="toggleFusionModal()">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">🛠️</span>
+                        <span class="feature-button-label">합성소</span>
+                    </div>
+                </div>
+                <div class="feature-button inventory-button" id="openInventoryButton">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">🎒</span>
+                        <span class="feature-button-label" id="inventoryButtonLabel">인벤토리 (0/5)</span>
+                    </div>
+                </div>
+                <div class="feature-button cosmic-space-container unlocked" id="cosmicSpaceContainer">
+                    <div class="cosmic-space-overlay">
+                        <span id="cosmicLockIcon" class="cosmic-space-lock-icon">🔒</span>
+                        <span id="cosmicSpaceLabel">우주 공간</span>
+                    </div>
+                </div>
+                <div class="feature-button dev-panel-button" id="devPanelButton" style="display: none;">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">👑</span>
+                        <span class="feature-button-label">개발자</span>
+                    </div>
+                </div>
+                <div class="feature-button blacksmith-button" id="blacksmithButton">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">🔨</span>
+                        <span class="feature-button-label">대장간</span>
+                    </div>
+                </div>
+                <div class="feature-button chat-toggle-btn" id="chatToggleButton">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">💬</span>
+                        <span class="feature-button-label">글로벌 채팅</span>
+                    </div>
+                </div>
+                <div class="feature-button auction-button" id="auctionHouseButton">
+                    <div class="feature-button-overlay">
+                        <span class="feature-button-icon">⚖️</span>
+                        <span class="feature-button-label">경매장</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="side-column right-side-column">
+        <!-- 설정 UI -->
+        <div class="settings-container">
+            <!-- 비로그인 시 클릭을 막기 위한 오버레이 -->
+            <div class="settings-overlay" style="display: none;"></div>
+            <h3>⚙️ 설정</h3>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="musicToggle">🎶 배경 음악</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="musicToggle">
+                        <label for="musicToggle" class="toggle-label"></label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="graphicsSetting">✨ 그래픽 품질</label>
+                    <select id="graphicsSetting" class="settings-select">
+                        <option value="high">높음</option>
+                        <option value="medium">중간</option>
+                        <option value="low">낮음</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="darkModeToggle">🌙 다크 모드</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <label for="darkModeToggle" class="toggle-label"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 의심 지수 게이지 -->
+        <div class="suspicion-gauge-container">
+            <h4>🤖 의심 지수</h4>
+            <div class="gauge-bar">
+                <div id="suspicionGauge" class="gauge-fill"></div>
+            </div>
+            <span id="suspicionScoreText">0 / 150</span>
+        </div>
+        <div class="ranking-container">
+            <h3>🏆 재호코인 랭킹</h3>
+            <div class="ranking-tabs">
+                <button class="ranking-tab active" data-criteria="coins">코인 랭킹</button>
+            </div>
+            <div class="ranking-list-container">
+                <div id="rankingList" class="ranking-list">
+                    <!-- 랭킹 목록이 여기에 동적으로 추가됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fireworks" id="fireworks"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script src="scripts/gameData.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/antiCheat.js"></script>
+    <script src="scripts/gacha.js"></script>
+    <script src="scripts/inventory.js"></script>
+    <script src="scripts/fusion.js"></script>
+    <script src="scripts/cosmicSpace.js"></script>
+    <script src="scripts/blacksmith.js"></script>
+    <script src="scripts/danyu.js"></script> <!-- 신규 스크립트 추가 -->
+    <script src="scripts/shop.js"></script>
+    <script src="scripts/effects.js"></script>
+    <script src="scripts/dev.js"></script>
+    <script src="scripts/firebase.js"></script>
+    <script src="scripts/auction.js"></script> <!-- 경매장 스크립트 추가 -->
+    <script src="scripts/main.js"></script>
+
+    <audio id="clickSound" src="assets/audio/클릭.wav" preload="auto"></audio>
+    <audio id="pullSound" src="assets/audio/뽑기.wav" preload="auto"></audio>
+</div>
+
+<!-- 봇 방지 퀴즈 모달 -->
+<div class="quiz-modal" id="quizModal">
+</div>
+
+<!-- 상점 모달 (body 끝 부분 근처에 추가) -->
+<div class="shop-modal" id="shopModal">
+    <div class="shop-content">
+        <div class="shop-header">
+            <h2>🏪 재호 상점</h2>
+            <button class="close-shop" onclick="toggleShop()">✕</button>
+        </div>
+        
+        <!-- 현재 활성 효과 표시 -->
+        <div class="active-effects" id="activeEffects">
+            <h3>🎯 활성 효과</h3>
+            <div class="effects-list" id="effectsList">
+                <p class="no-effects">활성 효과가 없습니다</p>
+            </div>
+        </div>
+        
+        <!-- 상점 아이템들 -->
+        <div class="shop-items">
+            <div class="shop-item" data-item="speedPotion">
+                <div class="item-icon">⚡</div>
+                <div class="item-info">
+                    <h4>신속 포션</h4>
+                    <p>다음 5회 뽑기 애니메이션 시간 절반</p>
+                    <div class="item-price">💰 200 코인</div>
+                </div>
+                <button class="buy-button" onclick="buyItem('speedPotion')">구매</button>
+            </div>
+            
+            <div class="shop-item" data-item="coinPotion">
+                <div class="item-icon">💰</div>
+                <div class="item-info">
+                    <h4>골드 포션</h4>
+                    <p>다음 5회 뽑기에서 골드 획득 2배</p>
+                    <div class="item-price">💰 700 코인</div>
+                </div>
+                <button class="buy-button" onclick="buyItem('coinPotion')">구매</button>
+            </div>
+            <div class="shop-item" data-item="superSpeedPotion">
+                <div class="item-icon">⚡✨</div>
+                <div class="item-info">
+                    <h4>슈퍼 신속 포션</h4>
+                    <p>다음 10회 뽑기 애니메이션 시간 1/3</p>
+                    <div class="item-price">💰 800 코인</div>
+                </div>
+                <button class="buy-button" onclick="buyItem('superSpeedPotion')">구매</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 등급별 이미지 미리보기 모달 -->
+<div class="image-preview-modal" id="imagePreviewModal">
+    <div class="image-preview-content">
+        <div class="image-preview-header">
+            <h3 id="previewGradeName"></h3>
+            <button class="close-preview" id="closePreviewModal">✕</button>
+        </div>
+        <div class="image-preview-grid" id="imagePreviewGrid">
+            <!-- 이미지가 여기에 동적으로 추가됩니다. -->
+        </div>
+    </div>
+</div>
+
+<!-- 획득 아이템 선택 모달 -->
+<div class="choice-modal" id="choiceModal">
+    <div class="choice-content">
+        <h2>새로운 재호를 획득했습니다!</h2>
+        <div class="choice-item-display">
+            <img id="choiceImage" src="" alt="획득한 재호">
+            <p id="choiceGradeText"></p>
+            <p id="choiceItemName" class="choice-item-name"></p>
+            <p id="choiceMutationText" class="choice-mutation-text" style="display: none;"></p>
+        </div>
+        <div class="choice-buttons">
+            <button id="keepButton">🎒 인벤토리에 넣기</button>
+            <button id="discardButton">💰 코인으로 바꾸기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 우주 공간 뽑기 모달 -->
+<div class="cosmic-gacha-modal" id="cosmicGachaModal">
+    <div class="cosmic-gacha-content">
+        <button class="back-button" id="exitCosmicSpaceButton">🌌 돌아가기</button>
+        <h1>🚀 우주 공간</h1>
+        <div class="cosmic-main-content">
+            <!-- 영구 행운 강화 섹션 -->
+            <div class="cosmic-section cosmic-luck-section">
+                <div class="cosmic-currency-display">
+                    <span class="cosmic-currency-icon">💠</span>
+                    <span id="cosmicFragmentsAmount">0</span>
+                    <span>코스믹 파편</span>
+                </div>
+                <div class="permanent-luck-container">
+                    <h4>✨ 영구 행운 강화</h4>
+                    <p>현재 레벨: <span id="permanentLuckLevel">0</span></p>
+                    <p>효과: 상위 등급 확률 영구 증가</p>
+                    <button id="upgradeLuckButton" class="buy-button">강화 (비용: <span id="luckUpgradeCost">10</span>💠)</button>
+                </div>
+            </div>
+
+            <!-- 미니게임 섹션 -->
+            <div class="cosmic-section cosmic-game-section">
+                <!-- 게임 소개 화면 -->
+                <div id="cosmicGameIntro">
+                    <h2>✨ 코즈믹 시그널</h2>
+                    <p>우주에서 오는 신호의 순서를 기억하고 그대로 따라 입력하세요. 레벨 5를 클리어하면 보상을 획득합니다!</p>
+                    <button id="startCosmicGameButton" class="pull-button">게임 시작</button>
+                </div>
+    
+                <!-- 게임 진행 화면 -->
+                <div id="cosmicGameArea" style="display: none;">
+                    <div id="cosmicGameUI">
+                        <span>레벨: <span id="cosmicGameLevel">1</span></span>
+                        <span id="cosmicGameStatus">신호를 기억하세요...</span>
+                    </div>
+                    <div id="cosmicSignalPad">
+                        <div class="signal-button" data-id="0"></div>
+                        <div class="signal-button" data-id="1"></div>
+                        <div class="signal-button" data-id="2"></div>
+                        <div class="signal-button" data-id="3"></div>
+                    </div>
+                </div>
+    
+                <!-- 게임 결과 화면 -->
+                <div id="cosmicGameResult" style="display: none;">
+                    <h2 id="cosmicGameResultTitle">게임 종료</h2>
+                    <p id="cosmicGameResultMessage">결과 메시지</p>
+                    <button id="restartCosmicGameButton" class="pull-button">다시하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 재호 합성소 모달 -->
+<div class="fusion-modal" id="fusionModal">
+    <div class="fusion-content">
+        <div class="fusion-header">
+            <h2>🛠️ 재호 합성소</h2>
+            <button class="close-fusion" onclick="toggleFusionModal()">✕</button>
+        </div>
+        <div class="fusion-main">
+            <div class="fusion-slots-container">
+                <h4>조합할 재호 (같은 등급 3개)</h4>
+                <div class="fusion-slots" id="fusionSlots">
+                    <div class="fusion-slot" data-slot-index="0"></div>
+                    <div class="fusion-slot" data-slot-index="1"></div>
+                    <div class="fusion-slot" data-slot-index="2"></div>
+                </div>
+                <div class="fusion-arrow">⬇️</div>
+                <div class="fusion-result">
+                    <div id="fusionResultSlot" class="fusion-slot result"></div>
+                </div>
+                <button id="fuseButton" class="fuse-button" disabled>합성하기</button>
+            </div>
+            <div class="fusion-inventory-container">
+                <h4>내 인벤토리</h4>
+                <div class="fusion-inventory-grid" id="fusionInventoryGrid">
+                    <!-- 인벤토리 아이템이 여기에 표시됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 닉네임 입력 모달 -->
+<div class="nickname-modal" id="nicknameModal">
+    <div class="nickname-content">
+        <h2>환영합니다!</h2>
+        <button class="close-modal-button" onclick="closeNicknameModal()">✕</button>
+        <p>게임에서 사용할 "실명(진짜 이름)을 입력해 주세요. (안하면 누군지 몰라서 이벤트때 못뿌림)".</p>
+        <input type="text" id="nicknameInput" placeholder="닉네임 (2~10자)" maxlength="10" minlength="2">
+        <p id="nicknameError" class="error-message"></p>
+        <button id="saveNicknameButton">저장하고 시작하기</button>
+    </div>
+</div>
+
+<!-- 로그인 모달 -->
+<div class="login-modal" id="loginModal">
+    <div class="login-content">
+        <div class="login-header">
+            <h2>로그인</h2>
+            <button class="close-modal-button" onclick="closeLoginModal()">✕</button>
+        </div>
+        <div id="previousLoginsContainer">
+            <!-- 이전에 로그인한 계정 목록이 여기에 표시됩니다. -->
+        </div>
+        <div class="login-actions">
+            <button id="addAccountButton" class="add-account-button">
+                <!-- Google 로고 SVG를 인라인으로 삽입하여 404 오류 해결 -->
+                <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                    <path fill="none" d="M0 0h48v48H0z"></path>
+                </svg>
+                <span>Google 계정으로 로그인</span> 
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 상세 인벤토리 모달 -->
+<div class="modal" id="detailedInventoryModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h2 id="detailedInventoryTitle">🎒 상세 인벤토리</h2>
+            <div class="modal-header-actions">
+                <button id="expandInventoryBtn" class="expand-inventory-button"></button>
+                <button class="close-modal-button" id="closeDetailedInventoryModal">✕</button>
+            </div>
+        </div>
+        <div class="detailed-inventory-grid" id="detailedInventoryGrid">
+            <!-- 상세 인벤토리 아이템이 여기에 동적으로 추가됩니다. -->
+        </div>
+    </div>
+</div>
+
+<!-- 개발자 패널 페이지 (모달 대신 전체 화면 사용) -->
+<div id="devPanelPage" class="dev-panel-page" style="display: none;">
+    <div class="dev-panel-page-header">
+        <h1>👑 개발자 패널</h1>
+        <button id="closeDevPanelButton" class="back-button">⬅️ 돌아가기</button>
+    </div>
+    <div class="dev-panel-container">
+        <div class="dev-panel-card">
+            <h2>🎁 아이템 및 재화 선물</h2>
+            <div class="dev-panel-main">
+                <div class="dev-form-group">
+                    <label for="targetUserSelect">대상 유저:</label>
+                    <select id="targetUserSelect"></select>
+                </div>
+                <div class="dev-form-group">
+                    <label for="giftItemSelect">아이템 선물:</label>
+                    <select id="giftItemSelect"></select>
+                    <button id="sendItemGiftButton" class="dev-action-button primary">아이템 보내기</button>
+                </div>
+                <div class="dev-form-group">
+                    <label for="giftAmount">재화 선물:</label>
+                    <div class="dev-input-group">
+                        <input type="number" id="giftAmount" value="10000">
+                        <button id="sendCoinGiftButton" class="dev-action-button">코인 보내기</button>
+                        <button id="sendFragmentGiftButton" class="dev-action-button">파편 보내기</button>
+                    </div>
+                </div>
+                <div id="devPanelMessage" class="dev-panel-message"></div>
+            </div>
+        </div>
+        <div class="dev-panel-card" id="userInspectorCard" style="display: none;">
+            <h2>🔍 유저 정보 (<span id="inspectorNickname"></span>)</h2>
+            <div class="dev-panel-main">
+                <!-- 인벤토리 정보 -->
+                <div class="dev-section">
+                    <div class="dev-section-header">
+                        <h4>인벤토리 (<span id="devInventoryCount">0/0</span>)</h4>
+                        <div class="dev-form-group compact">
+                            <label for="devInventorySize">크기 설정:</label>
+                            <input type="number" id="devInventorySize" min="0" style="width: 80px;">
+                            <button id="updateInventorySizeButton" class="dev-action-button">적용</button>
+                        </div>
+                    </div>
+                    <div class="dev-inventory-grid" id="devUserInventoryGrid"></div>
+                </div>
+                <!-- 확률 조작 -->
+                <div class="dev-section">
+                    <h4>📊 등급별 확률 조작</h4>
+                    <div class="dev-probability-grid" id="devProbabilityGrid">
+                        <!-- 확률 입력 필드가 여기에 동적으로 생성됩니다. -->
+                    </div>
+                    <div class="dev-button-group">
+                        <button id="updateProbabilitiesButton" class="dev-action-button primary">확률 저장</button>
+                        <button id="resetProbabilitiesButton" class="dev-action-button secondary">기본값으로</button>
+                    </div>
+                </div>
+                <!-- 변이 확률 조작 -->
+                <div class="dev-section">
+                    <h4>✨ 변이 확률 조작</h4>
+                    <div class="dev-probability-grid" id="devMutationProbabilityGrid">
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-gold" style="color: #ffd700;">골드 변이</label>
+                            <input type="number" id="prob-mutation-gold" value="15" step="0.1" min="0">
+                        </div>
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-rainbow" class="mutation-text-rainbow">레인보우 변이</label>
+                            <input type="number" id="prob-mutation-rainbow" value="3" step="0.1" min="0">
+                        </div>
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-flame" style="color: #e74c3c;">화염 변이</label>
+                            <input type="number" id="prob-mutation-flame" value="10" step="0.1" min="0">
+                        </div>
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-danyu" style="color: #3498db;">최단유 변이</label>
+                            <input type="number" id="prob-mutation-danyu" value="5" step="0.1" min="0">
+                        </div>
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-neon" style="color: #00c2ff;">네온 변이</label>
+                            <input type="number" id="prob-mutation-neon" value="7" step="0.1" min="0">
+                        </div>
+                        <div class="dev-form-group">
+                            <label for="prob-mutation-sky_blue" style="color: #87CEEB;">하늘빛 변이</label>
+                            <input type="number" id="prob-mutation-sky_blue" value="5" step="0.1" min="0">
+                        </div>
+                    </div>
+                    <div class="dev-button-group">
+                        <button id="updateMutationProbabilitiesButton" class="dev-action-button primary">변이 확률 저장</button>
+                        <button id="resetMutationProbabilitiesButton" class="dev-action-button secondary">기본값으로</button>
+                    </div>
+                </div>
+                <div id="inspectorPanelMessage" class="dev-panel-message"></div>
+            </div>
+        </div>
+        <div class="dev-panel-card">
+            <h2>📢 서버 전체 공지</h2>
+            <div class="dev-panel-main">
+                <div class="dev-form-group full-width">
+                    <label for="announcementMessage">공지 내용:</label>
+                    <textarea id="announcementMessage" rows="3" placeholder="모든 접속중인 유저에게 보낼 메시지를 입력하세요..."></textarea>
+                </div>
+                <button id="sendAnnouncementButton" class="dev-action-button primary">공지 보내기</button>
+                <div id="announcementPanelMessage" class="dev-panel-message"></div>
+            </div>
+        </div>
+        <div class="dev-panel-card">
+            <h2>📢 공지 답장 확인</h2>
+            <div class="dev-panel-main">
+                <div class="dev-section-header">
+                    <h4 id="latestAnnouncementText">최신 공지: 불러오는 중...</h4>
+                    <button id="refreshRepliesButton" class="dev-action-button">새로고침</button>
+                </div>
+                <div class="announcement-replies-list" id="announcementRepliesList"></div>
+            </div>
+        </div>
+        <div class="dev-panel-card">
+            <h2>🟢 접속중인 유저 (<span id="onlineUserCount">0</span>)</h2>
+            <div class="online-user-list" id="onlineUserList">
+                <p>유저 정보를 불러오는 중...</p>
+            </div>
+        </div>
+        <div class="dev-panel-card">
+            <h2>⏰ 이벤트 제어</h2>
+            <div class="dev-panel-main">
+                <div class="dev-form-group">
+                    <label for="forceRealEventButton">실제 이벤트 강제 실행:</label>
+                    <button id="forceRealEventButton" class="dev-action-button primary">시작/종료 토글</button>
+                </div>
+                <div class="dev-form-group">
+                    <label for="forceFlameEventButton">화염 이벤트 강제 실행:</label>
+                    <button id="forceFlameEventButton" class="dev-action-button" style="background: linear-gradient(45deg, #e74c3c, #c0392b);">시작/종료 토글</button>
+                </div>
+                <div class="dev-form-group">
+                    <label for="forceDanYuEventButton">최단유 이벤트 강제 실행:</label>
+                    <button id="forceDanYuEventButton" class="dev-action-button" style="background: linear-gradient(45deg, #3498db, #2980b9);">시작/종료 토글</button>
+                </div>
+                <div class="dev-form-group">
+                    <label for="forceClubEventButton">클럽 파티 이벤트 강제 실행:</label>
+                    <button id="forceClubEventButton" class="dev-action-button" style="background: linear-gradient(45deg, #9b59b6, #da00ff);">시작/종료 토글</button>
+                </div>
+                <div class="dev-form-group">
+                    <label for="forceStratosphereEventButton">성층권 이벤트 강제 실행:</label>
+                    <button id="forceStratosphereEventButton" class="dev-action-button" style="background: linear-gradient(45deg, #87CEEB, #4682B4);">시작/종료 토글</button>
+                </div>
+                <p style="font-size: 0.9em; color: #bdc3c7; margin-top: 10px;">이 버튼은 모든 유저에게 실시간으로 이벤트를 시작하거나 종료합니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 글로벌 채팅 페이지 (신규) -->
+<div id="chatPage" class="chat-page-container" style="display: none;">
+    <div class="chat-page-header">
+        <h1>💬 글로벌 채팅</h1>
+        <button id="closeChatPageButton" class="back-button">⬅️ 돌아가기</button>
+    </div>
+    <div class="chat-page-content">
+        <div class="chat-messages custom-scrollbar" id="chatPageMessages">
+            <!-- 채팅 메시지가 여기에 동적으로 추가됩니다. -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatPageInput" placeholder="메시지 입력..." maxlength="100">
+            <button id="chatPageSendButton">전송</button>
+        </div>
+    </div>
+</div>
+
+<!-- 대장간 모달 (신규) -->
+<div class="modal" id="blacksmithModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h2>🔨 재호 대장간</h2>
+            <button class="close-modal-button" id="closeBlacksmithModal">✕</button>
+        </div>
+        <div class="blacksmith-main">
+            <div class="blacksmith-enhancement-area">
+                <h4>강화할 재호</h4>
+                <div class="enhancement-slot" id="enhancementSlot">
+                    <!-- 강화할 아이템이 여기에 표시됩니다. -->
+                </div>
+                <div class="enhancement-info" id="enhancementInfo" style="display: none;">
+                    <p>현재 강화: <span id="currentEnhancementLevel">0</span>강</p>
+                    <p>성공 확률: <span id="successChance">100%</span></p>
+                    <p>강화 비용: <span id="enhancementCost">100</span> 코인</p>
+                    <p>현재 판매가: <span id="currentSellPrice">0</span> 코인</p>
+                    <p class="failure-warning">⚠️ 실패 시 아이템이 파괴됩니다!</p>
+                </div>
+                <button id="enhanceButton" class="fuse-button" disabled>강화하기</button>
+            </div>
+            <div class="blacksmith-inventory-container">
+                <h4>내 인벤토리</h4>
+                <div class="blacksmith-inventory-grid custom-scrollbar" id="blacksmithInventoryGrid">
+                    <!-- 인벤토리 아이템이 여기에 표시됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 경매장 모달 (신규) -->
+<div class="modal" id="auctionHouseModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h2>⚖️ 경매장</h2>
+            <button class="close-modal-button" id="closeAuctionHouseModal">✕</button>
+        </div>
+        <div class="auction-house-body">
+            <div class="auction-tabs">
+                <button class="auction-tab active" data-tab="browse">아이템 둘러보기</button>
+                <button class="auction-tab" data-tab="my-listings">내 등록 물품</button>
+            </div>
+            <div class="auction-tab-content active" id="auctionBrowseContent">
+                <div class="auction-filters">
+                    <input type="text" id="auctionSearchInput" placeholder="아이템 이름으로 검색...">
+                    <select id="auctionGradeFilter">
+                        <option value="">모든 등급</option>
+                        <!-- 등급 옵션은 JS로 채워집니다 -->
+                    </select>
+                    <button id="auctionSearchButton">검색</button>
+                </div>
+                <div class="auction-grid custom-scrollbar" id="auctionGrid">
+                    <!-- 경매 아이템이 여기에 표시됩니다. -->
+                </div>
+            </div>
+            <div class="auction-tab-content" id="auctionMyListingsContent">
+                <div class="auction-grid custom-scrollbar" id="myListingsGrid">
+                    <!-- 내 등록 물품이 여기에 표시됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 아이템 등록 가격 설정 모달 (신규) -->
+<div class="modal" id="listItemPriceModal">
+    <div class="modal-content">
+        <!-- 내용은 JS로 채워집니다. -->
+    </div>
+</div>
+</body>
+</html>

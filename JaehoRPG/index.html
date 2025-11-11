@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>JaehoRPG</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js" type="module"></script>
+</head>
+<body>
+    <IMG></IMG>
+    <div id="lobby">
+        <!-- Login Form -->
+        <div id="login-view">
+            <h2>로그인</h2>
+            <div class="form-container">
+                <input type="text" id="login-username" placeholder="아이디">
+                <input type="password" id="login-password" placeholder="비밀번호">
+                <button id="login-button">로그인</button>
+                <p class="form-switcher">계정이 없으신가요? <a href="#" id="show-register-view">회원가입</a></p>
+            </div>
+        </div>
+
+        <!-- Register Form (hidden by default) -->
+        <div id="register-view" class="hidden">
+            <h2>회원가입</h2>
+            <div class="form-container">
+                <input type="text" id="register-username" placeholder="아이디 (로그인 시 사용)">
+                <input type="email" id="register-email" placeholder="이메일 (비밀번호 찾기용)">
+                <input type="password" id="register-password" placeholder="비밀번호">
+                <input type="text" id="register-nickname" placeholder="닉네임 (게임 내 표시)">
+                <button id="register-button">회원가입</button>
+                <p class="form-switcher">이미 계정이 있으신가요? <a href="#" id="show-login-view">로그인</a></p>
+            </div>
+        </div>
+
+        <p id="message"></p>
+
+        <!-- User Info (hidden by default) -->
+        <div id="user-info" class="hidden">
+            <p><span id="user-nickname"></span>님 환영합니다!</p>
+            <button id="play-button">플레이하기</button>
+            <button id="logout-button">로그아웃</button>
+        </div>
+    </div>
+
+    <canvas id="game-canvas" class="hidden"></canvas>
+
+    <div id="joystick-container" class="hidden">
+        <div id="joystick-base">
+            <div id="joystick-stick"></div>
+        </div>
+    </div>
+
+    <div id="rotate-warning" class="hidden">
+        <p>가로 모드로 플레이해주세요!</p>
+        <p>Please rotate your device to landscape mode.</p>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

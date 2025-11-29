@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "frameDuration": 0.2
+  },
+  "animations": {
+    "walk_down": ["forward01.png", "forward02.png"],
+    "walk_up": ["backward01.png", "backward02.png"],
+    "walk_right": ["side01.png", "side02.png", "side03.png", "side02.png"],
+    "walk_down_right": ["diagonal01.png", "diagonal02.png"]
+  }
+}

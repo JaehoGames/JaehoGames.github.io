@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Editor</title>
+    <link rel="stylesheet" href="map.css">
+</head>
+<body>
+    <h1>Map Editor</h1>
+    <div id="selection-info"></div>
+    <div id="editor-container">
+        <div id="tileset-container">
+            <h2>Tileset</h2>
+            <canvas id="tileset-canvas"></canvas>
+            <div id="collision-tools" style="display: none;">
+                <h3>Collision Tools</h3>
+                <button id="set-collidable">Set Collidable (1)</button>
+                <button id="set-non-collidable">Set Non-Collidable (0)</button>
+            </div>
+        </div>
+        <div id="map-container">
+            <h2>Map</h2>
+            <div id="layer-selector">
+                <input type="radio" id="layer-ground" name="layer" value="ground" checked>
+                <label for="layer-ground">Ground</label>
+                <input type="radio" id="layer-object" name="layer" value="object">
+                <label for="layer-object">Object</label>
+                <input type="radio" id="layer-tile-collision" name="layer" value="tileCollision">
+                <label for="layer-tile-collision">Tile Collision</label>
+                <input type="radio" id="layer-object-collision" name="layer" value="objectCollision">
+                <label for="layer-object-collision">Object Collision</label>
+            </div>
+            <canvas id="map-canvas"></canvas>
+        </div>
+    </div>
+    <div id="export-container">
+        <button id="export-button">Export All Layers</button>
+        <textarea id="map-output" rows="20" cols="80" readonly></textarea>
+    </div>
+    <script src="map.js"></script>
+</body>
+</html>

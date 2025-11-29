@@ -1,0 +1,29 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#editor-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#tileset-container, #map-container {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+canvas {
+    border: 1px solid black;
+    cursor: crosshair;
+}
+
+#export-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}

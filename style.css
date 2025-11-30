@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+/* --- 변수 정의 (리퀴드 오로라 테마) --- */
+:root {
+    --bg-color: #0a0a1a; /* 깊은 네이비 색 배경 */
+    --text-color: #333333;
+    --container-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
+    /* 리퀴드 오로라 색상 팔레트 */
+    --aurora-color-1: hsla(300, 80%, 70%, 0.6);
+    --aurora-color-2: hsla(230, 80%, 70%, 0.6);
+    --aurora-color-3: hsla(180, 80%, 70%, 0.6);
+    --aurora-color-4: hsla(50, 80%, 70%, 0.6);
+
+    /* 버튼 색상 */
+    --button-color-1: #f2f2f7;
+    --button-color-1-hover: #e5e5ea;
+    --button-color-2: #f2f2f7;
+    --button-color-2-hover: #e5e5ea;
+}
+
+/* --- 기본 및 배경 설정 --- */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- 리퀴드 오로라 배경 --- */
+.art-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* 기하학적 배경보다 뒤로 보내기 위해 z-index 수정 */
+    filter: blur(100px) saturate(1.5); /* 매우 부드럽고 몽환적인 효과 */
+}
+
+.art-background .layer {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen; /* 색상을 밝게 혼합 */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.layer-1 {
+    width: 60vmax;
+    height: 60vmax;
+    background: radial-gradient(circle, var(--aurora-color-1), transparent 60%);
+    top: -20%;
+    left: -20%;
+    animation-name: move-1;
+    animation-duration: 20s;
+}
+
+.layer-2 {
+    width: 50vmax;
+    height: 50vmax;
+    background: radial-gradient(circle, var(--aurora-color-2), transparent 60%);
+    bottom: -20%;
+    right: -20%;
+    animation-name: move-2;
+    animation-duration: 25s;
+    animation-delay: -5s;
+}
+
+.layer-3 {
+    width: 45vmax;
+    height: 45vmax;
+    background: radial-gradient(circle, var(--aurora-color-3), transparent 60%);
+    top: 30%;
+    right: -10%;
+    animation-name: move-3;
+    animation-duration: 30s;
+    animation-delay: -10s;
+}
+
+.layer-4 {
+    width: 55vmax;
+    height: 55vmax;
+    background: radial-gradient(circle, var(--aurora-color-4), transparent 60%);
+    bottom: 20%;
+    left: -15%;
+    animation-name: move-4;
+    animation-duration: 22s;
+    animation-delay: -15s;
+}
+
+/* --- 기하학적 모션 그래픽 배경 --- */
+.geometric-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* 오로라 배경과 콘텐츠 카드 사이 */
+    perspective: 500px; /* 3D 효과를 위한 원근감 설정 */
+    transform-style: preserve-3d;
+}
+
+.geometric-background .shape {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transform-style: preserve-3d;
+    animation-name: geo-rotate;
+    animation-duration: 20s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.shape.s1 {
+    width: 30vmax; height: 30vmax;
+    animation-delay: -1s;
+}
+.shape.s2 {
+    width: 40vmax; height: 40vmax;
+    animation-delay: -2s;
+}
+.shape.s3 {
+    width: 50vmax; height: 50vmax;
+    animation-delay: -3s;
+}
+.shape.s4 {
+    width: 60vmax; height: 60vmax;
+    animation-delay: -4s;
+}
+.shape.s5 {
+    width: 70vmax; height: 70vmax;
+    animation-delay: -5s;
+}
+
+@keyframes geo-rotate {
+    from {
+        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg);
+    }
+}
+
+/* --- 메인 컨테이너 (심플 카드) --- */
+.container {
+    background: var(--container-bg);
+    color: var(--text-color);
+    padding: 35px 45px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px var(--shadow-color);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    z-index: 1;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* --- 제목 (심플) --- */
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 35px;
+}
+
+/* --- 버튼 컨테이너 --- */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- 게임 버튼 (심플) --- */
+.game-button {
+    display: block;
+    text-decoration: none;
+    color: #222;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 15px 25px;
+    border-radius: 10px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.game-button:hover {
+    transform: scale(1.04);
+    color: #000;
+}
+
+.btn-randomjaeho {
+    background-color: var(--button-color-1);
+}
+.btn-randomjaeho:hover {
+    background-color: var(--button-color-1-hover);
+}
+
+.btn-coinjaeho {
+    background-color: var(--button-color-2);
+}
+.btn-coinjaeho:hover {
+    background-color: var(--button-color-2-hover);
+}
+
+/* --- 키프레임 애니메이션 --- */
+
+/* 리퀴드 오로라 움직임 애니메이션 */
+@keyframes move-1 {
+    to { transform: translate(20vw, 15vh) rotate(60deg); }
+}
+
+@keyframes move-2 {
+    to { transform: translate(-25vw, -10vh) rotate(-45deg) scale(1.2); }
+}
+
+@keyframes move-3 {
+    to { transform: translate(-15vw, 20vh) rotate(90deg); }
+}
+
+@keyframes move-4 {
+    to { transform: translate(30vw, -5vh) rotate(-70deg) scale(0.9); }
+}
+
+/* --- 미디어 쿼리 (모바일 최적화) --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 25px;
+        width: 88%;
+    }
+    .title {
+        font-size: 28px;
+    }
+    .game-button {
+        padding: 15px 20px;
+        font-size: 16px;
+    }
+    .art-background {
+        filter: blur(80px) saturate(1.2);
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+    .game-button {
+        font-size: 15px;
+        padding: 14px 18px;
+    }
+    .art-background {
+        /* 저사양 기기에서 성능 확보를 위해 애니메이션 속도 저하 */
+        .layer {
+            animation-duration: 40s;
+        }
+    }
+}
+
+/*
+   참고:
+   - 이 디자인의 핵심은 `filter: blur()` 값입니다. 이 값을 조절하여
+     배경의 부드러움을 조절할 수 있습니다. (값이 클수록 부드러워집니다)
+   - `mix-blend-mode`를 `overlay`나 `soft-light` 등으로 변경하면
+     전혀 다른 색상 혼합 느낌을 연출할 수 있습니다.
+   - 각 레이어의 애니메이션 지속 시간(`animation-duration`)을 조절하여
+     움직임의 빠르기를 변경할 수 있습니다.
+*/
+/*
+   추가된 참고:
+   - 기하학적 애니메이션의 `perspective` 값을 조절하여 3D의 깊이감을 변경할 수 있습니다. (값이 작을수록 왜곡이 심해집니다)
+   - `geo-rotate` 키프레임의 `rotateX` 값을 조절하여 도형이 기울어진 각도를 변경할 수 있습니다. (예: `rotateX(90deg)`는 수평으로 보임)
+*/
